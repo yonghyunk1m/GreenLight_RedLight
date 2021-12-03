@@ -7,32 +7,26 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.ImageButton
 import android.widget.Toast
-import com.example.greenlight_redlight.databinding.ActivityMainBinding
+import com.example.greenlight_redlight.databinding.ActivityCreditBinding
 
-class MainActivity : AppCompatActivity() {
+class CreditActivity : AppCompatActivity() {
 
-    private lateinit var StartButton: ImageButton
-    private lateinit var CreditButton: ImageButton
+    private lateinit var BackButton: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_credit)
 
-        val binding = ActivityMainBinding.inflate(layoutInflater)
+        val binding = ActivityCreditBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        StartButton = binding.startButton
-        CreditButton = binding.creditButton
-        StartButton.setOnClickListener({
-            val intent = Intent(this, MainActivity2::class.java)
+        BackButton = binding.backButton
+
+        BackButton.setOnClickListener({
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent) // Transition to the next(MainActivity2) window
             finish() // CLOSE current(MainActivity) window
         })
-        CreditButton.setOnClickListener({
-            val intent = Intent(this, CreditActivity::class.java)
-            startActivity(intent) // Transition to the next(MainActivity2) window
-            finish() // CLOSE current(MainActivity) window
-        })
-    // Develop1
+
     }
 
     // Back Press Caution Function //
@@ -53,4 +47,3 @@ class MainActivity : AppCompatActivity() {
     }
 
 }
-//TEST
