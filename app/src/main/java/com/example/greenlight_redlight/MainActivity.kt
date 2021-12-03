@@ -13,6 +13,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var StartButton: ImageButton
     private lateinit var CreditButton: ImageButton
+    private lateinit var AppinfoButton: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +23,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         StartButton = binding.startButton
         CreditButton = binding.creditButton
+        AppinfoButton = binding.appinfoButton
+
         StartButton.setOnClickListener({
             val intent = Intent(this, MainActivity2::class.java)
             startActivity(intent) // Transition to the next(MainActivity2) window
@@ -29,6 +32,11 @@ class MainActivity : AppCompatActivity() {
         })
         CreditButton.setOnClickListener({
             val intent = Intent(this, CreditActivity::class.java)
+            startActivity(intent) // Transition to the next(MainActivity2) window
+            finish() // CLOSE current(MainActivity) window
+        })
+        AppinfoButton.setOnClickListener({
+            val intent = Intent(this, AppinfoActivity::class.java)
             startActivity(intent) // Transition to the next(MainActivity2) window
             finish() // CLOSE current(MainActivity) window
         })
