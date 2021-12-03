@@ -10,6 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GreenLight_RedLight">
         <activity
+            android:name=".MainActivity2"
+            android:exported="true" />
+        <activity
+            android:name=".Tagger_or_Player"
+            android:exported="true"
+            android:label="@string/title_activity_tagger_or_player" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
