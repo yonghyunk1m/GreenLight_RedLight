@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.greenlight_redlight">
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -18,10 +19,6 @@
         <activity
             android:name=".MainActivity2"
             android:exported="true" />
-        <activity
-            android:name=".Tagger_or_Player"
-            android:exported="true"
-            android:label="@string/title_activity_tagger_or_player" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
