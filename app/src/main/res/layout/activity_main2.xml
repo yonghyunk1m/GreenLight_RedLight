@@ -46,7 +46,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3"
+        android:layout_weight="2"
         android:orientation="horizontal"
         android:weightSum="10"
         >
@@ -55,7 +55,7 @@
             android:layout_marginLeft="10dp"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
+            android:layout_weight="2.6"
             android:background="@drawable/back_button"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="369dp" />
