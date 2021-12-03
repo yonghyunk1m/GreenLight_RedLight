@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GreenLight_RedLight">
         <activity
+            android:name=".TaggerActivity"
+            android:exported="true" />
+        <activity
+            android:name=".PlayerActivity"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity2"
             android:exported="true" />
         <activity
