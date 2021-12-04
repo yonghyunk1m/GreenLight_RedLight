@@ -8,6 +8,7 @@ import android.os.Looper
 import android.widget.ImageButton
 import android.widget.Toast
 import com.example.greenlight_redlight.databinding.ActivityMainBinding
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
 
