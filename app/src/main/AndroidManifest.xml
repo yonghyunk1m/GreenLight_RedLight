@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GreenLight_RedLight">
         <activity
+            android:name=".FailActivity"
+            android:exported="true" />
+        <activity
             android:name=".AppinfoActivity"
             android:exported="true" />
         <activity
