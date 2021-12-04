@@ -22,7 +22,7 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
     private var CurrentData = 0f
     private var PreviousData = 0f
     private var difference = 0f
-    private var threshold = 2f
+    private var threshold = 1f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +43,7 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
         super.onResume()
         Log.d("onResume","onResume")
         sensorManager.apply{
-            registerListener(this@PlayerActivity, AccelerometerSensor, 1)
+            registerListener(this@PlayerActivity, AccelerometerSensor, 10)
         }
     }
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {}
