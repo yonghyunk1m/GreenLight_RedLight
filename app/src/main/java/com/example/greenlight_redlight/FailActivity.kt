@@ -1,17 +1,32 @@
 package com.example.greenlight_redlight
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.MotionEvent
+import android.widget.ImageButton
 import android.widget.Toast
 
 class FailActivity : AppCompatActivity() {
+
+    private lateinit var BackButton: ImageButton
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_fail)
+
     }
 
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        if (event != null) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent) // Transition to the next(MainActivity2) window
+            finish() // CLOSE current(MainActivity) window
+        }
+        return true
+    }
     // Back Press Caution Function //
     private var doubleBackToExit = false
     override fun onBackPressed() {
