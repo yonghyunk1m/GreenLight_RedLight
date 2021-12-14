@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "43629455159",
+    "project_id": "greenlight-redlight",
+    "storage_bucket": "greenlight-redlight.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:43629455159:android:4ee5e324585b2f70f9dcb2",
+        "android_client_info": {
+          "package_name": "com.example.greenlight_redlight"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "43629455159-6ijm80ncegeokd1bn60mjtp32kfpe9rd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAD4FZ6sm63OfYr4gipY3PmJzGwsjZ7GYQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "43629455159-6ijm80ncegeokd1bn60mjtp32kfpe9rd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
