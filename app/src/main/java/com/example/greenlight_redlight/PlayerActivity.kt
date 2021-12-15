@@ -2,6 +2,7 @@ package com.example.greenlight_redlight
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.hardware.SensorEvent
@@ -14,6 +15,7 @@ import android.util.Log
 import android.widget.Toast
 
 import com.example.greenlight_redlight.databinding.ActivityPlayerBinding
+import com.google.firebase.database.*
 
 class PlayerActivity : AppCompatActivity(), SensorEventListener {
 
@@ -24,9 +26,32 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
     private var difference = 0f
     private var threshold = 1f
 
+    var playerName: String? = ""
+    var roomName: String? = ""
+    var message: String = ""
+    var isRunning: Boolean = false
+
+    lateinit var database: FirebaseDatabase
+    lateinit var messageRef: DatabaseReference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
+
+        database = FirebaseDatabase.getInstance()
+
+        val preferences: SharedPreferences = getSharedPreferences("PREFS", 0)
+        playerName = preferences.getString("playerName", "")
+
+        var extras: Bundle? = intent.extras
+        if (extras != null) {
+            roomName = extras.getString("roomName")
+        }
+
+        messageRef = database.getReference("rooms/$roomName/message")
+        message = "guest:$playerName has entered"
+        messageRef.setValue(message)
+        addRoomEventListener()
 
         val binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -39,6 +64,23 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
         //binding.redBackground.setBackgroundResource(R.drawable.red02_background)
 
     }
+
+    private fun addRoomEventListener() {
+        messageRef.addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if(dataSnapshot.getValue(String::class.java)?.contains("host:") as Boolean) {
+                    Toast.makeText(this@PlayerActivity, "" +
+                            dataSnapshot.getValue(String::class.java)!!.replace("host:", ""),
+                        Toast.LENGTH_SHORT).show()
+                    isRunning = true
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                messageRef.setValue(message)
+            }
+        })
+    }
+
     override fun onResume() {
         super.onResume()
         Log.d("onResume","onResume")
@@ -48,7 +90,7 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
     }
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {}
     override fun onSensorChanged(event: SensorEvent?) {
-        if (event != null) {
+        if (isRunning && event != null) {
             val binding = ActivityPlayerBinding.inflate(layoutInflater)
             setContentView(binding.root)
 
@@ -78,6 +120,11 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
                 }
                 else{
                     // Change to Failed Activity
+                    messageRef = database.getReference("rooms/$roomName/message")
+                    message = "guest:$playerName has failed"
+                    messageRef.setValue(message)
+                    addRoomEventListener()
+
                     val intent = Intent(this, FailActivity::class.java)
                     startActivity(intent) // Transition to the next(MainActivity2) window
                     finish() // CLOSE current(MainActivity) window

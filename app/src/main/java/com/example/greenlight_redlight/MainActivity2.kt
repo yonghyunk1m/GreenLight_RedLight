@@ -77,7 +77,7 @@ class MainActivity2 : AppCompatActivity() {
     private fun addRoomEventListener() {
         roomRef.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                var intent = Intent(applicationContext, MainActivity3::class.java)
+                var intent = Intent(applicationContext, TaggerActivity::class.java)
                 intent.putExtra("roomName", roomName)
                 startActivity(intent)
             }
