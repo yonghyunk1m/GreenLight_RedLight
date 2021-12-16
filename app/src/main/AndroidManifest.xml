@@ -12,9 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GreenLight_RedLight">
         <activity
-            android:name=".MainActivity3"
-            android:exported="false" />
-        <activity
             android:name=".RoomActivity"
             android:exported="false" />
         <activity

@@ -25,6 +25,7 @@ class MainActivity2 : AppCompatActivity() {
 
     lateinit var database: FirebaseDatabase
     lateinit var roomRef: DatabaseReference
+    lateinit var usersRef: DatabaseReference
     lateinit var roomsRef: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,8 +55,10 @@ class MainActivity2 : AppCompatActivity() {
             override fun onClick(v: View?) {
                 roomName = playerName
                 roomRef = database.getReference("rooms/$roomName/player1")
+                usersRef = database.getReference("rooms/$roomName/users")
                 addRoomEventListener();
                 roomRef.setValue(playerName)
+                usersRef.setValue(1)
             }
         })
         addRoomsEventListener()

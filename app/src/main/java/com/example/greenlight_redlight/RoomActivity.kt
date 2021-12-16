@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
@@ -21,6 +22,7 @@ class RoomActivity : AppCompatActivity() {
 
     lateinit var database: FirebaseDatabase
     lateinit var roomRef: DatabaseReference
+    lateinit var usersRef: DatabaseReference
     lateinit var roomsRef: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,9 +41,15 @@ class RoomActivity : AppCompatActivity() {
         listView.setOnItemClickListener(object: AdapterView.OnItemClickListener {
             override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 roomName = roomsList.get(position)
-                roomRef = database.getReference("rooms/$roomName/player2")
-                addRoomEventListener();
-                roomRef.setValue(playerName)
+                usersRef = database.getReference("rooms/$roomName/users")
+
+                usersRef.get().addOnSuccessListener {
+                    val number = it.value as Long
+                    roomRef = database.getReference("rooms/$roomName/player${number + 1}")
+                    addRoomEventListener();
+                    roomRef.setValue(playerName)
+                    usersRef.setValue(number + 1)
+                }
             }
         })
 

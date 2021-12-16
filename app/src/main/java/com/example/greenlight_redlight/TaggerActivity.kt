@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.ListView
 import android.widget.Toast
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
@@ -18,16 +20,22 @@ class TaggerActivity : AppCompatActivity() {
     var playerName: String? = ""
     var roomName: String? = ""
     var message: String = ""
+    lateinit var usersList: MutableList<String>;
+    lateinit var listView: ListView;
 
     lateinit var database: FirebaseDatabase
     lateinit var messageRef: DatabaseReference
+    lateinit var usersRef: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tagger)
 
         button = findViewById(R.id.button)
-        button.isEnabled = true
+        button.isEnabled = false
+
+        listView = findViewById(R.id.listView)
+        usersList = mutableListOf();
 
         database = FirebaseDatabase.getInstance()
 
@@ -47,10 +55,33 @@ class TaggerActivity : AppCompatActivity() {
             }
         })
 
+        usersRef = database.getReference("rooms/$roomName/users")
+        usersEventListener()
+
         messageRef = database.getReference("rooms/$roomName/message")
         message = "host"
         messageRef.setValue(message)
         addRoomEventListener()
+    }
+
+    private fun usersEventListener() {
+        usersRef.addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if(dataSnapshot.getValue(Long::class.java)!! > 1) {
+                    button.isEnabled = true
+                    database.getReference("rooms/$roomName/player${dataSnapshot.getValue(Long::class.java)}")
+                        .get().addOnSuccessListener {
+                            usersList.add(it.value as String)
+                            var adapter: ArrayAdapter<String> = ArrayAdapter(this@TaggerActivity,
+                                android.R.layout.simple_list_item_1, usersList)
+                            listView.adapter = adapter
+                        }
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                // nothing
+            }
+        })
     }
 
     private fun addRoomEventListener() {
@@ -68,11 +99,16 @@ class TaggerActivity : AppCompatActivity() {
         })
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        var roomRef = database.getReference("rooms/$playerName")
+        roomRef.removeValue()
+    }
+
     private var doubleBackToExit = false
     override fun onBackPressed() {
         if (doubleBackToExit) {
-            var roomRef = database.getReference("rooms/$playerName")
-            roomRef.removeValue()
+
             finishAffinity()
         } else {
             Toast.makeText(this, "종료하시려면 뒤로가기를 한번 더 눌러주세요.", Toast.LENGTH_SHORT).show()
