@@ -26,6 +26,7 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
     private var difference = 0f
     private var threshold = 1f
 
+    var playerNumber: Long = 0
     var playerName: String? = ""
     var roomName: String? = ""
     var message: String = ""
@@ -46,6 +47,7 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
         var extras: Bundle? = intent.extras
         if (extras != null) {
             roomName = extras.getString("roomName")
+            playerNumber = extras.getLong("playerNumber")
         }
 
         messageRef = database.getReference("rooms/$roomName/message")
@@ -88,6 +90,14 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
             registerListener(this@PlayerActivity, AccelerometerSensor, 10)
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        var playerRef = database.getReference("rooms/$roomName/player$playerNumber")
+        playerRef.removeValue()
+    }
+
+
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {}
     override fun onSensorChanged(event: SensorEvent?) {
         if (isRunning && event != null) {

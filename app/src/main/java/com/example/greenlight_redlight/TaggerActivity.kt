@@ -108,7 +108,6 @@ class TaggerActivity : AppCompatActivity() {
     private var doubleBackToExit = false
     override fun onBackPressed() {
         if (doubleBackToExit) {
-
             finishAffinity()
         } else {
             Toast.makeText(this, "종료하시려면 뒤로가기를 한번 더 눌러주세요.", Toast.LENGTH_SHORT).show()

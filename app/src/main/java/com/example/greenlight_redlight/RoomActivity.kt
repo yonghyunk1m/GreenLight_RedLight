@@ -17,6 +17,8 @@ class RoomActivity : AppCompatActivity() {
     lateinit var listView: ListView;
     lateinit var roomsList: MutableList<String>;
 
+    var number: Any = 0;
+    var prevNumber: Any = 0;
     var playerName: String? = "";
     var roomName: String? = "";
 
@@ -42,13 +44,15 @@ class RoomActivity : AppCompatActivity() {
             override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 roomName = roomsList.get(position)
                 usersRef = database.getReference("rooms/$roomName/users")
-
+                prevNumber = number
                 usersRef.get().addOnSuccessListener {
-                    val number = it.value as Long
-                    roomRef = database.getReference("rooms/$roomName/player${number + 1}")
+                    number = it.value as Long + 1
+                    roomRef = database.getReference("rooms/$roomName/player${number}")
                     addRoomEventListener();
                     roomRef.setValue(playerName)
-                    usersRef.setValue(number + 1)
+                    usersRef.setValue(number)
+                }.addOnCanceledListener {
+                    // nothing
                 }
             }
         })
@@ -59,9 +63,14 @@ class RoomActivity : AppCompatActivity() {
     private fun addRoomEventListener() {
         roomRef.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                var intent = Intent(applicationContext, PlayerActivity::class.java)
-                intent.putExtra("roomName", roomName)
-                startActivity(intent)
+                if(number != prevNumber) {
+                    prevNumber = number
+                    var intent = Intent(applicationContext, PlayerActivity::class.java)
+                    Log.d("********", "$number")
+                    intent.putExtra("roomName", roomName)
+                    intent.putExtra("playerNumber", number as Long)
+                    startActivity(intent)
+                }
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 Toast.makeText(this@RoomActivity, "Error!", Toast.LENGTH_SHORT).show()
