@@ -53,14 +53,26 @@ class TaggerActivity : AppCompatActivity() {
             roomName = extras.getString("roomName")
         }
 
-        StartButton.setOnClickListener(object: View.OnClickListener {
+        StartButton.setOnClickListener({
+            StartButton.isEnabled = false
+            message = "host:START!!!"
+            messageRef.setValue(message)
+            val intent = Intent(this, TaggerActivity2::class.java)
+            startActivity(intent) // Transition to the next(MainActivity2) window
+            finish() // CLOSE current(MainActivity) window
+        })
+
+/*        StartButton.setOnClickListener(object: View.OnClickListener {
             override fun onClick(v: View) {
                 StartButton.isEnabled = false
                 message = "host:START!!!"
                 messageRef.setValue(message)
+                val intent = Intent(this, TaggerActivity2::class.java)
+                startActivity(intent) // Transition to the next(MainActivity2) window
+                finish() // CLOSE current(MainActivity) window
             }
         })
-
+*/
         BackButton.setOnClickListener({
             val intent = Intent(this, MainActivity2::class.java)
             startActivity(intent) // Transition to the next(MainActivity2) window
