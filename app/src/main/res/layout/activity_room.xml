@@ -34,9 +34,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2.6"
-            android:background="@drawable/back_button"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="369dp" />
+            android:background="@drawable/back_button" />
     </LinearLayout>
 
 </LinearLayout>
