@@ -25,7 +25,8 @@ class TaggerActivity : AppCompatActivity() {
 
     lateinit var database: FirebaseDatabase
     lateinit var messageRef: DatabaseReference
-    lateinit var usersRef: DatabaseReference
+    lateinit var playersRef: DatabaseReference
+    private lateinit var lengthRef: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,8 +56,11 @@ class TaggerActivity : AppCompatActivity() {
             }
         })
 
-        usersRef = database.getReference("rooms/$roomName/users")
-        usersEventListener()
+        lengthRef = database.getReference("rooms/$roomName/length")
+        lengthEventListener()
+
+        playersRef = database.getReference("rooms/$roomName/players")
+        addPlayersEventListener()
 
         messageRef = database.getReference("rooms/$roomName/message")
         message = "host"
@@ -64,19 +68,36 @@ class TaggerActivity : AppCompatActivity() {
         addRoomEventListener()
     }
 
-    private fun usersEventListener() {
-        usersRef.addValueEventListener(object: ValueEventListener {
+    private fun addPlayersEventListener() {
+        playersRef.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if(dataSnapshot.getValue(Long::class.java)!! > 1) {
-                    button.isEnabled = true
-                    database.getReference("rooms/$roomName/player${dataSnapshot.getValue(Long::class.java)}")
-                        .get().addOnSuccessListener {
-                            usersList.add(it.value as String)
-                            var adapter: ArrayAdapter<String> = ArrayAdapter(this@TaggerActivity,
-                                android.R.layout.simple_list_item_1, usersList)
-                            listView.adapter = adapter
+                usersList.clear()
+                val users: Iterable<DataSnapshot> = dataSnapshot.children
+                for(snapshot: DataSnapshot in users) {
+                    val name = snapshot.getValue(String::class.java)
+                    if(name != roomName) {
+                        if (name != null) {
+                            usersList.add(name)
                         }
+                    }
+                    val adapter: ArrayAdapter<String> = ArrayAdapter(
+                        this@TaggerActivity,
+                        android.R.layout.simple_list_item_1, usersList
+                    )
+                    listView.adapter = adapter
                 }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // nothing
+            }
+        })
+    }
+
+    private fun lengthEventListener() {
+        lengthRef.addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                button.isEnabled = dataSnapshot.getValue(Long::class.java)!! > 1
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 // nothing

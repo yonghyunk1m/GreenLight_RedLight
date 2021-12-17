@@ -93,10 +93,15 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        var playerRef = database.getReference("rooms/$roomName/player$playerNumber")
+        val lengthRef = database.getReference("rooms/$roomName/length")
+        lengthRef.get().addOnSuccessListener {
+            val length = it.value as Long - 1
+            lengthRef.setValue(length)
+        }
+
+        val playerRef = database.getReference("rooms/$roomName/players/player$playerNumber")
         playerRef.removeValue()
     }
-
 
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {}
     override fun onSensorChanged(event: SensorEvent?) {
@@ -144,8 +149,6 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
             PreviousData = CurrentData
         }
     }
-
-
 
 
     // Back Press Caution Function //

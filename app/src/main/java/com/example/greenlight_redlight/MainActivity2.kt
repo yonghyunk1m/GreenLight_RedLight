@@ -27,6 +27,7 @@ class MainActivity2 : AppCompatActivity() {
     lateinit var roomRef: DatabaseReference
     lateinit var usersRef: DatabaseReference
     lateinit var roomsRef: DatabaseReference
+    lateinit var lengthRef: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,11 +55,13 @@ class MainActivity2 : AppCompatActivity() {
         TaggerButton.setOnClickListener(object: View.OnClickListener {
             override fun onClick(v: View?) {
                 roomName = playerName
-                roomRef = database.getReference("rooms/$roomName/player1")
+                roomRef = database.getReference("rooms/$roomName/players/player1")
                 usersRef = database.getReference("rooms/$roomName/users")
+                lengthRef = database.getReference("rooms/$roomName/length")
                 addRoomEventListener();
                 roomRef.setValue(playerName)
                 usersRef.setValue(1)
+                lengthRef.setValue(1)
             }
         })
         addRoomsEventListener()
@@ -80,7 +83,7 @@ class MainActivity2 : AppCompatActivity() {
     private fun addRoomEventListener() {
         roomRef.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                var intent = Intent(applicationContext, TaggerActivity::class.java)
+                val intent = Intent(applicationContext, TaggerActivity::class.java)
                 intent.putExtra("roomName", roomName)
                 startActivity(intent)
             }

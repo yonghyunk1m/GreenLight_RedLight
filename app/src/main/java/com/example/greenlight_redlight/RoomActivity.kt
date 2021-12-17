@@ -18,6 +18,7 @@ class RoomActivity : AppCompatActivity() {
     lateinit var roomsList: MutableList<String>;
 
     var number: Any = 0;
+    var length: Any = 0;
     var prevNumber: Any = 0;
     var playerName: String? = "";
     var roomName: String? = "";
@@ -26,6 +27,7 @@ class RoomActivity : AppCompatActivity() {
     lateinit var roomRef: DatabaseReference
     lateinit var usersRef: DatabaseReference
     lateinit var roomsRef: DatabaseReference
+    lateinit var lengthRef: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,10 +49,17 @@ class RoomActivity : AppCompatActivity() {
                 prevNumber = number
                 usersRef.get().addOnSuccessListener {
                     number = it.value as Long + 1
-                    roomRef = database.getReference("rooms/$roomName/player${number}")
+                    roomRef = database.getReference("rooms/$roomName/players/player${number}")
                     addRoomEventListener();
                     roomRef.setValue(playerName)
                     usersRef.setValue(number)
+                }.addOnCanceledListener {
+                    // nothing
+                }
+                lengthRef = database.getReference("rooms/$roomName/length")
+                lengthRef.get().addOnSuccessListener {
+                    length = it.value as Long + 1
+                    lengthRef.setValue(length)
                 }.addOnCanceledListener {
                     // nothing
                 }
@@ -66,7 +75,6 @@ class RoomActivity : AppCompatActivity() {
                 if(number != prevNumber) {
                     prevNumber = number
                     var intent = Intent(applicationContext, PlayerActivity::class.java)
-                    Log.d("********", "$number")
                     intent.putExtra("roomName", roomName)
                     intent.putExtra("playerNumber", number as Long)
                     startActivity(intent)
@@ -83,10 +91,10 @@ class RoomActivity : AppCompatActivity() {
         roomsRef.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 roomsList.clear();
-                var rooms: Iterable<DataSnapshot> = dataSnapshot.children;
+                val rooms: Iterable<DataSnapshot> = dataSnapshot.children;
                 for(snapshot: DataSnapshot in rooms) {
                     snapshot.key?.let { roomsList.add(it) }
-                    var adapter: ArrayAdapter<String> = ArrayAdapter(this@RoomActivity,
+                    val adapter: ArrayAdapter<String> = ArrayAdapter(this@RoomActivity,
                         android.R.layout.simple_list_item_1, roomsList)
                     listView.adapter = adapter
                 }
