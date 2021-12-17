@@ -4,7 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
+import android.widget.ImageButton
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -67,7 +67,7 @@ class LoginActivity : AppCompatActivity() {
 
 class LoginActivity : AppCompatActivity() {
     lateinit var editText: EditText
-    lateinit var button: Button
+    lateinit var button: ImageButton
 
     var playerName: String? = ""
     lateinit var database: FirebaseDatabase
@@ -94,7 +94,7 @@ class LoginActivity : AppCompatActivity() {
                 playerName = editText.getText().toString()
                 editText.setText("")
                 if(!playerName.equals("")) {
-                    button.setText("LOGGING IN")
+                    //button.setText("LOGGING IN")
                     button.isEnabled = false
                     playerRef = database.getReference("players/$playerName")
                     addEventListener()
@@ -119,7 +119,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                button.setText("LOG IN")
+                //button.setText("LOG IN")
                 button.isEnabled = true
                 Toast.makeText(this@LoginActivity, "Error!", Toast.LENGTH_SHORT).show()
             }
