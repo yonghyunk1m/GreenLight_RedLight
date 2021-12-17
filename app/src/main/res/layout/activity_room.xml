@@ -1,15 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RoomActivity">
-
+    tools:context=".RoomActivity"
+    android:background="@drawable/room_selection_background"
+    android:weightSum="50"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="13.9"></LinearLayout>
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="31.5"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.1"></LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="horizontal"
+        android:weightSum="10"
+        >
+        <ImageButton
+            android:id="@+id/back_button"
+            android:layout_marginLeft="10dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2.6"
+            android:background="@drawable/back_button"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="369dp" />
+    </LinearLayout>
 
-
-</RelativeLayout>
+</LinearLayout>
