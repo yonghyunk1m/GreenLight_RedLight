@@ -24,7 +24,7 @@ class TaggerActivity : AppCompatActivity() {
     var playerName: String? = ""
     var roomName: String? = ""
     var message: String = ""
-    lateinit var usersList: MutableList<String>;
+    lateinit var usersList: ArrayList<String>;
     lateinit var listView: ListView;
 
     lateinit var database: FirebaseDatabase
@@ -41,14 +41,14 @@ class TaggerActivity : AppCompatActivity() {
         BackButton = findViewById(R.id.back_button)
 
         listView = findViewById(R.id.listView)
-        usersList = mutableListOf();
+        usersList = ArrayList()
 
         database = FirebaseDatabase.getInstance()
 
         val preferences: SharedPreferences = getSharedPreferences("PREFS", 0)
         playerName = preferences.getString("playerName", "")
 
-        var extras: Bundle? = intent.extras
+        val extras: Bundle? = intent.extras
         if (extras != null) {
             roomName = extras.getString("roomName")
         }
@@ -58,8 +58,9 @@ class TaggerActivity : AppCompatActivity() {
             message = "host:START!!!"
             messageRef.setValue(message)
             val intent = Intent(this, TaggerActivity2::class.java)
+            intent.putStringArrayListExtra("usersList", usersList)
             startActivity(intent) // Transition to the next(MainActivity2) window
-            finish() // CLOSE current(MainActivity) window
+            //finish() // CLOSE current(MainActivity) window
         })
 
 /*        StartButton.setOnClickListener(object: View.OnClickListener {
@@ -76,7 +77,7 @@ class TaggerActivity : AppCompatActivity() {
         BackButton.setOnClickListener({
             val intent = Intent(this, MainActivity2::class.java)
             startActivity(intent) // Transition to the next(MainActivity2) window
-            finish() // CLOSE current(MainActivity) window
+            //finish() // CLOSE current(MainActivity) window
         })
 
         lengthRef = database.getReference("rooms/$roomName/length")
@@ -123,7 +124,7 @@ class TaggerActivity : AppCompatActivity() {
         lengthRef.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 StartButton.isEnabled = dataSnapshot.getValue(Long::class.java)!! > 1
-                if (StartButton.isEnabled == true) {
+                if (StartButton.isEnabled) {
                     StartButton = findViewById(R.id.start_button)
                     StartButton.setBackgroundResource(R.drawable.start_button)
                 }
@@ -155,7 +156,7 @@ class TaggerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        var roomRef = database.getReference("rooms/$playerName")
+        val roomRef = database.getReference("rooms/$playerName")
         roomRef.removeValue()
     }
 
@@ -171,7 +172,7 @@ class TaggerActivity : AppCompatActivity() {
             }
         }
     }
-    fun runDelayed(millis: Long, function: () -> Unit) {
+    private fun runDelayed(millis: Long, function: () -> Unit) {
         Handler(Looper.getMainLooper()).postDelayed(function, millis)
     }
 }
