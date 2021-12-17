@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
+import com.example.greenlight_redlight.databinding.ActivityMain2Binding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -18,6 +19,8 @@ import com.example.greenlight_redlight.databinding.ActivityRoomBinding
 class RoomActivity : AppCompatActivity() {
     lateinit var listView: ListView;
     lateinit var roomsList: MutableList<String>;
+
+    lateinit var BackButton: ImageButton
 
     var number: Any = 0;
     var length: Any = 0;
@@ -34,6 +37,10 @@ class RoomActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_room)
+
+        val binding = ActivityRoomBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        BackButton = binding.backButton
 
         database = FirebaseDatabase.getInstance()
         val preferences: SharedPreferences = getSharedPreferences("PREFS", 0)
@@ -66,6 +73,12 @@ class RoomActivity : AppCompatActivity() {
                     // nothing
                 }
             }
+        })
+
+        BackButton.setOnClickListener({
+            val intent = Intent(this, MainActivity2::class.java)
+            startActivity(intent) // Transition to the next(MainActivity2) window
+            finish() // CLOSE current(MainActivity) window
         })
 
         addRoomsEventListener()
