@@ -1,5 +1,6 @@
 package com.example.greenlight_redlight
 
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,7 +9,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ListView
 import android.widget.Toast
 import com.google.firebase.auth.ktx.auth
@@ -18,7 +19,8 @@ import com.example.greenlight_redlight.databinding.ActivityTaggerBinding
 
 
 class TaggerActivity : AppCompatActivity() {
-    lateinit var button: Button
+    lateinit var StartButton: ImageButton
+    lateinit var BackButton: ImageButton
     var playerName: String? = ""
     var roomName: String? = ""
     var message: String = ""
@@ -34,8 +36,9 @@ class TaggerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tagger)
 
-        button = findViewById(R.id.button)
-        button.isEnabled = false
+        StartButton = findViewById(R.id.start_button)
+        StartButton.isEnabled = false
+        BackButton = findViewById(R.id.back_button)
 
         listView = findViewById(R.id.listView)
         usersList = mutableListOf();
@@ -50,12 +53,18 @@ class TaggerActivity : AppCompatActivity() {
             roomName = extras.getString("roomName")
         }
 
-        button.setOnClickListener(object: View.OnClickListener {
+        StartButton.setOnClickListener(object: View.OnClickListener {
             override fun onClick(v: View) {
-                button.isEnabled = false
+                StartButton.isEnabled = false
                 message = "host:START!!!"
                 messageRef.setValue(message)
             }
+        })
+
+        BackButton.setOnClickListener({
+            val intent = Intent(this, MainActivity2::class.java)
+            startActivity(intent) // Transition to the next(MainActivity2) window
+            finish() // CLOSE current(MainActivity) window
         })
 
         lengthRef = database.getReference("rooms/$roomName/length")
@@ -68,6 +77,8 @@ class TaggerActivity : AppCompatActivity() {
         message = "host"
         messageRef.setValue(message)
         addRoomEventListener()
+
+
     }
 
     private fun addPlayersEventListener() {
@@ -99,7 +110,15 @@ class TaggerActivity : AppCompatActivity() {
     private fun lengthEventListener() {
         lengthRef.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                button.isEnabled = dataSnapshot.getValue(Long::class.java)!! > 1
+                StartButton.isEnabled = dataSnapshot.getValue(Long::class.java)!! > 1
+                if (StartButton.isEnabled == true) {
+                    StartButton = findViewById(R.id.start_button)
+                    StartButton.setBackgroundResource(R.drawable.start_button)
+                }
+                else{
+                    StartButton = findViewById(R.id.start_button)
+                    StartButton.setBackgroundResource(R.drawable.part_background)
+                }
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 // nothing
