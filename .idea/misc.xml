@@ -8,17 +8,15 @@
         <entry key="..\:/Users/AndroidStudio/AndroidStudioProjects/GreenLight_RedLight/app/src/main/res/layout/activity_appinfo.xml" value="0.2755208333333333" />
         <entry key="..\:/Users/AndroidStudio/AndroidStudioProjects/GreenLight_RedLight/app/src/main/res/layout/activity_credit.xml" value="0.25" />
         <entry key="..\:/Users/AndroidStudio/AndroidStudioProjects/GreenLight_RedLight/app/src/main/res/layout/activity_fail.xml" value="0.36614583333333334" />
-        <entry key="..\:/Users/AndroidStudio/AndroidStudioProjects/GreenLight_RedLight/app/src/main/res/layout/activity_login.xml" value="0.33" />
         <entry key="..\:/Users/AndroidStudio/AndroidStudioProjects/GreenLight_RedLight/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/AndroidStudio/AndroidStudioProjects/GreenLight_RedLight/app/src/main/res/layout/activity_main2.xml" value="0.33" />
         <entry key="..\:/Users/AndroidStudio/AndroidStudioProjects/GreenLight_RedLight/app/src/main/res/layout/activity_player.xml" value="0.33" />
-        <entry key="..\:/Users/AndroidStudio/AndroidStudioProjects/GreenLight_RedLight/app/src/main/res/layout/activity_room.xml" value="0.33" />
-        <entry key="..\:/Users/AndroidStudio/AndroidStudioProjects/GreenLight_RedLight/app/src/main/res/layout/activity_tagger.xml" value="0.33" />
-        <entry key="..\:/Users/AndroidStudio/AndroidStudioProjects/GreenLight_RedLight/app/src/main/res/layout/activity_tagger2.xml" value="0.25" />
+        <entry key="..\:/Users/AndroidStudio/AndroidStudioProjects/GreenLight_RedLight/app/src/main/res/layout/activity_tagger.xml" value="0.20364583333333333" />
         <entry key="..\:/Users/AndroidStudio/AndroidStudioProjects/GreenLight_RedLight/app/src/main/res/layout/activity_tagger_or_player.xml" value="0.25" />
-        <entry key="..\:/Users/AndroidStudio/AndroidStudioProjects/GreenLight_RedLight/app/src/main/res/layout/fragment_login.xml" value="0.22" />
         <entry key="..\:/Users/AndroidStudio/AndroidStudioProjects/GreenLight_RedLight/app/src/main/res/menu/bottom_nav_menu.xml" value="0.2046875" />
         <entry key="..\:/Users/AndroidStudio/AndroidStudioProjects/GreenLight_RedLight/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.21770833333333334" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.16770833333333332" />
+        <entry key="app/src/main/res/layout/activity_tagger2.xml" value="0.24427083333333333" />
       </map>
     </option>
   </component>

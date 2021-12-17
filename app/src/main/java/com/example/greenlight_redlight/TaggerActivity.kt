@@ -59,7 +59,7 @@ class TaggerActivity : AppCompatActivity() {
             messageRef.setValue(message)
             val intent = Intent(this, TaggerActivity2::class.java)
             startActivity(intent) // Transition to the next(MainActivity2) window
-            finish() // CLOSE current(MainActivity) window
+            //finish() // CLOSE current(MainActivity) window
         })
 
 /*        StartButton.setOnClickListener(object: View.OnClickListener {
@@ -77,6 +77,7 @@ class TaggerActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivity2::class.java)
             startActivity(intent) // Transition to the next(MainActivity2) window
             finish() // CLOSE current(MainActivity) window
+            onDestroy()
         })
 
         lengthRef = database.getReference("rooms/$roomName/length")
