@@ -76,7 +76,7 @@ class RoomActivity : AppCompatActivity() {
         })
 
         BackButton.setOnClickListener({
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, MainActivity2::class.java)
             startActivity(intent) // Transition to the next(MainActivity2) window
             finish() // CLOSE current(MainActivity) window
         })
