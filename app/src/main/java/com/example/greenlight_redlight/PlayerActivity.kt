@@ -7,13 +7,12 @@ import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
+import android.os.*
 import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.MotionEvent
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 
 import com.example.greenlight_redlight.databinding.ActivityPlayerBinding
 import com.google.firebase.database.*
@@ -150,6 +149,7 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
         return true
     }
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {}
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onSensorChanged(event: SensorEvent?) {
         if (!isRed && isRunning){
             val binding = ActivityPlayerBinding.inflate(layoutInflater)
@@ -193,6 +193,9 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
                     messageRef = database.getReference("rooms/$roomName/message")
                     message = "$playerName has failed "+ currentTime
                     messageRef.setValue(message)
+                    playerName = message
+                    val playerRef = database.getReference("rooms/$roomName/players/player$playerNumber")
+                    playerRef.setValue(playerName)
                     addRoomEventListener()
                     //val intent = Intent(this, FailActivity::class.java)
                     //startActivity(intent) // Transition to the next(MainActivity2) window
