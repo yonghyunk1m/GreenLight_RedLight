@@ -95,11 +95,13 @@ class TaggerActivity2 : AppCompatActivity() {
     private fun addRoomEventListener() {
         messageRef.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if(dataSnapshot.getValue(String::class.java)?.contains("guest:") as Boolean) {
+                if (dataSnapshot.getValue(String::class.java)?.contains("fail") as Boolean) {
+                    //list modification
+                }
+                else if(dataSnapshot.getValue(String::class.java)?.contains("guest:") as Boolean) {
                     val binding = ActivityTagger2Binding.inflate(layoutInflater)
                     setContentView(binding.root)
                     listView = binding.listView
-                    //list modification
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {

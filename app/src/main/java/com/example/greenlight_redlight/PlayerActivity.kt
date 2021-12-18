@@ -79,6 +79,28 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
                         Toast.LENGTH_SHORT).show()
                     isRunning = true
                 }
+                else if(dataSnapshot.getValue(String::class.java)?.contains("Red") as Boolean) {
+                    isRed = true
+                }
+                else if (dataSnapshot.getValue(String::class.java)?.contains("Green") as Boolean){
+                    isRed = false
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                messageRef.setValue(message)
+            }
+        })
+    }
+/*
+    private fun PlayerFailListener() {
+        messageRef.addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if(dataSnapshot.getValue(String::class.java)?.contains("fail") as Boolean) {
+                    Toast.makeText(this@PlayerActivity, "" +
+                            dataSnapshot.getValue(String::class.java)!!.replace("host:", ""),
+                        Toast.LENGTH_SHORT).show()
+                    isRunning = true
+                }
                 if(dataSnapshot.getValue(String::class.java)?.contains("Red") as Boolean) {
                     isRed = true
                 }
@@ -91,6 +113,7 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
             }
         })
     }
+*/
 
     override fun onResume() {
         super.onResume()
@@ -157,14 +180,16 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
                     // Change to Failed Activity
                     val currentTime = getCurrentTime()
                     messageRef = database.getReference("rooms/$roomName/message")
-                    message = "guest:$playerName has failed "+ currentTime
+                    message = "$playerName has failed "+ currentTime
                     messageRef.setValue(message)
-                    addRoomEventListener()
 
+
+                    addRoomEventListener()
+                    sensorManager.unregisterListener(this)
+                    //binding.redBackground.setBackgroundResource(R.drawable.fail_background)
                     val intent = Intent(this, FailActivity::class.java)
                     startActivity(intent) // Transition to the next(MainActivity2) window
                     finish() // CLOSE current(MainActivity) window
-                    sensorManager.unregisterListener(this)
                 }
             }
             PreviousData = CurrentData
