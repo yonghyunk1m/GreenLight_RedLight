@@ -82,7 +82,7 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
                 if(dataSnapshot.getValue(String::class.java)?.contains("Red") as Boolean) {
                     isRed = true
                 }
-                else{
+                else if (dataSnapshot.getValue(String::class.java)?.contains("Green") as Boolean){
                     isRed = false
                 }
             }
@@ -119,12 +119,12 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {}
     override fun onSensorChanged(event: SensorEvent?) {
-        if (!isRed){
+        if (!isRed && isRunning){
             val binding = ActivityPlayerBinding.inflate(layoutInflater)
             setContentView(binding.root)
             binding.redBackground.setBackgroundResource(R.drawable.green_background)
         }
-        if (isRed && isRunning && event != null) {
+        else if (isRed && isRunning && event != null) {
             val binding = ActivityPlayerBinding.inflate(layoutInflater)
             setContentView(binding.root)
 
