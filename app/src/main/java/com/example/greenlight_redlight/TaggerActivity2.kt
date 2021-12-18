@@ -77,6 +77,9 @@ class TaggerActivity2 : AppCompatActivity() {
 
         addUsersList()
 
+        playersRef = database.getReference("rooms/$roomName/players")
+        addPlayersEventListener()
+
         messageRef = database.getReference("rooms/$roomName/message")
         message = "host"
         messageRef.setValue(message)
@@ -92,20 +95,35 @@ class TaggerActivity2 : AppCompatActivity() {
         listView.adapter = adapter
     }
 
+    private fun addPlayersEventListener() {
+        playersRef.addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                usersList.clear()
+                val users: Iterable<DataSnapshot> = dataSnapshot.children
+                for(snapshot: DataSnapshot in users) {
+                    val name = snapshot.getValue(String::class.java)
+                    if(name != roomName) {
+                        if (name != null) {
+                            usersList.add(name)
+                        }
+                    }
+                    val adapter: ArrayAdapter<String> = ArrayAdapter(
+                        this@TaggerActivity2,
+                        android.R.layout.simple_list_item_1, usersList
+                    )
+                    listView.adapter = adapter
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // nothing
+            }
+        })
+    }
     private fun addRoomEventListener() {
         messageRef.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.getValue(String::class.java)?.contains("fail") as Boolean) {
-
-                    var extras: Bundle? = intent.extras
-                    usersList = extras!!.getStringArrayList("usersList") as ArrayList<String>
-
-                    val binding = ActivityTagger2Binding.inflate(layoutInflater)
-                    setContentView(binding.root)
-                    listView = binding.listView
-
-                    addUsersList()
-
                     Toast.makeText(this@TaggerActivity2, "" +
                             dataSnapshot.getValue(String::class.java)!!.replace("host:", ""),
                         Toast.LENGTH_SHORT).show()
