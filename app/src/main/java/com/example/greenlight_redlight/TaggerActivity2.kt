@@ -87,28 +87,8 @@ class TaggerActivity2 : AppCompatActivity() {
         listView.setOnItemClickListener(object: AdapterView.OnItemClickListener {
             override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 val currentTime = getCurrentTime()
-                val playerNumber = position
-/*
-                playerRef = database.getReference("rooms/$roomName/players")
-                playerRef.addValueEventListener(object: ValueEventListener){
-
-                }
-                */
-                /*
-                database.reference.get().addOnSuccessListener{
-                    playerName = it.("rooms/$roomName/message")
-                }
-                val valueEventListener = object : ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        playerName = dataSnapshot.getValue
-                        for (ds in dataSnapshot.children) {
-                            playerName = ds.child("rooms/$roomName/players/player$playerNumber").getValue(String::class.java)
-                        }
-                    }
-                    override fun onCancelled(databaseError: DatabaseError) {
-                    }
-                }
-                */
+                val playerNumber = position+2
+                playerName = usersList.get(position)
 
                 messageRef = database.getReference("rooms/$roomName/message")
                 message = "$playerName has succeed "+ currentTime
