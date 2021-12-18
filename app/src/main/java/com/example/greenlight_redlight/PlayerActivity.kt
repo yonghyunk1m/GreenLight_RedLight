@@ -16,6 +16,8 @@ import android.widget.Toast
 
 import com.example.greenlight_redlight.databinding.ActivityPlayerBinding
 import com.google.firebase.database.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class PlayerActivity : AppCompatActivity(), SensorEventListener {
 
@@ -103,6 +105,11 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
         playerRef.removeValue()
     }
 
+    fun getCurrentTime(): String{
+        val formatter = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+        return formatter.format(Calendar.getInstance().time)
+    }
+
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {}
     override fun onSensorChanged(event: SensorEvent?) {
         if (isRunning && event != null) {
@@ -133,10 +140,12 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
                 else if (difference < threshold) {
                     binding.redBackground.setBackgroundResource(R.drawable.red07_background)
                 }
-                else{
+                else
+                {
                     // Change to Failed Activity
+                    val currentTime = getCurrentTime()
                     messageRef = database.getReference("rooms/$roomName/message")
-                    message = "guest:$playerName has failed"
+                    message = "guest:$playerName has failed "+ currentTime
                     messageRef.setValue(message)
                     addRoomEventListener()
 
