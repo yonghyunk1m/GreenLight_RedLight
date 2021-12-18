@@ -33,6 +33,7 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
     var roomName: String? = ""
     var message: String = ""
     var isRunning: Boolean = false
+    var isRed:Boolean = false
 
     lateinit var database: FirebaseDatabase
     lateinit var messageRef: DatabaseReference
@@ -78,6 +79,12 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
                         Toast.LENGTH_SHORT).show()
                     isRunning = true
                 }
+                if(dataSnapshot.getValue(String::class.java)?.contains("Red") as Boolean) {
+                    isRed = true
+                }
+                else{
+                    isRed = false
+                }
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 messageRef.setValue(message)
@@ -112,7 +119,12 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {}
     override fun onSensorChanged(event: SensorEvent?) {
-        if (isRunning && event != null) {
+        if (!isRed){
+            val binding = ActivityPlayerBinding.inflate(layoutInflater)
+            setContentView(binding.root)
+            binding.redBackground.setBackgroundResource(R.drawable.green_background)
+        }
+        if (isRed && isRunning && event != null) {
             val binding = ActivityPlayerBinding.inflate(layoutInflater)
             setContentView(binding.root)
 
