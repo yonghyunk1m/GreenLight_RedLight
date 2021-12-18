@@ -24,14 +24,16 @@ class TaggerActivity2 : AppCompatActivity() {
 
     private lateinit var GreenButton: ImageButton
     private lateinit var RedButton: ImageButton
+    lateinit var roomsList: MutableList<String>;
 
     var playerName: String? = ""
+
     var roomName: String? = ""
     var message: String = ""
     lateinit var listView: ListView;
 
     lateinit var database: FirebaseDatabase
-    //lateinit var messageRef: DatabaseReference
+    lateinit var messageRef: DatabaseReference
     lateinit var playersRef: DatabaseReference
     private lateinit var usersList: ArrayList<String>
 
@@ -39,9 +41,17 @@ class TaggerActivity2 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tagger2)
 
+        val preferences: SharedPreferences = getSharedPreferences("PREFS", 0)
+        playerName = preferences.getString("playerName", "")
 
+        var extras: Bundle? = intent.extras
+        if (extras != null) {
+            usersList = extras.getStringArrayList("usersList") as ArrayList<String>
+        }
+        roomName= playerName // ID (nickname)
         database = FirebaseDatabase.getInstance()
-        playersRef = database.getReference("rooms/$roomName/players")
+        //playersRef = database.getReference("rooms/$roomName/players")
+        messageRef = database.getReference("rooms/$roomName/message")
 
         val binding = ActivityTagger2Binding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -49,24 +59,28 @@ class TaggerActivity2 : AppCompatActivity() {
         RedButton = binding.redButton
         listView = binding.listView
 
-        val extras: Bundle? = intent.extras
-        if (extras != null) {
-            usersList = extras.getStringArrayList("usersList") as ArrayList<String>
-        }
-
         GreenButton.setOnClickListener(object: View.OnClickListener {
             override fun onClick(v: View?) {
                 binding.background.setBackgroundResource(R.drawable.tagger_green_background)
+                message = "Green Light"
+                messageRef.setValue(message)
             }
         })
 
         RedButton.setOnClickListener(object: View.OnClickListener {
             override fun onClick(v: View?) {
                 binding.background.setBackgroundResource(R.drawable.tagger_red_background)
+                message = "Red Light"
+                messageRef.setValue(message)
             }
         })
 
         addUsersList()
+
+        messageRef = database.getReference("rooms/$roomName/message")
+        message = "host"
+        messageRef.setValue(message)
+        addRoomEventListener()
     }
 
     private fun addUsersList() {
@@ -78,4 +92,19 @@ class TaggerActivity2 : AppCompatActivity() {
         listView.adapter = adapter
     }
 
+    private fun addRoomEventListener() {
+        messageRef.addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if(dataSnapshot.getValue(String::class.java)?.contains("guest:") as Boolean) {
+                    val binding = ActivityTagger2Binding.inflate(layoutInflater)
+                    setContentView(binding.root)
+                    listView = binding.listView
+                    //list modification
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                messageRef.setValue(message)
+            }
+        })
+    }
 }

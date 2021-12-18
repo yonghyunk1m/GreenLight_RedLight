@@ -9,6 +9,7 @@ import android.widget.ImageButton
 import android.widget.Toast
 import com.example.greenlight_redlight.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.ChildEventListener
 
 class MainActivity : AppCompatActivity() {
 
@@ -61,5 +62,5 @@ class MainActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed(function, millis)
     }
 
+
 }
-//TEST
