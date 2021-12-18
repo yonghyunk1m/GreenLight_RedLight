@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.MotionEvent
 import android.widget.Toast
 
 import com.example.greenlight_redlight.databinding.ActivityPlayerBinding
@@ -34,6 +35,7 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
     var message: String = ""
     var isRunning: Boolean = false
     var isRed:Boolean = false
+    var isFail:Boolean = false
 
     lateinit var database: FirebaseDatabase
     lateinit var messageRef: DatabaseReference
@@ -139,7 +141,14 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
         val formatter = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
         return formatter.format(Calendar.getInstance().time)
     }
-
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        if (event != null && isFail) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent) // Transition to the next(MainActivity2) window
+            finish() // CLOSE current(MainActivity) window
+        }
+        return true
+    }
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {}
     override fun onSensorChanged(event: SensorEvent?) {
         if (!isRed && isRunning){
@@ -177,19 +186,17 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
                 }
                 else
                 {
-                    // Change to Failed Activity
+                    sensorManager.unregisterListener(this)
+                    isFail = true
+                    binding.redBackground.setBackgroundResource(R.drawable.fail_background)
                     val currentTime = getCurrentTime()
                     messageRef = database.getReference("rooms/$roomName/message")
                     message = "$playerName has failed "+ currentTime
                     messageRef.setValue(message)
-
-
                     addRoomEventListener()
-                    sensorManager.unregisterListener(this)
-                    //binding.redBackground.setBackgroundResource(R.drawable.fail_background)
-                    val intent = Intent(this, FailActivity::class.java)
-                    startActivity(intent) // Transition to the next(MainActivity2) window
-                    finish() // CLOSE current(MainActivity) window
+                    //val intent = Intent(this, FailActivity::class.java)
+                    //startActivity(intent) // Transition to the next(MainActivity2) window
+                    //finish() // CLOSE current(MainActivity) window
                 }
             }
             PreviousData = CurrentData
