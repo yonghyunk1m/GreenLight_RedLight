@@ -96,7 +96,19 @@ class TaggerActivity2 : AppCompatActivity() {
         messageRef.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.getValue(String::class.java)?.contains("fail") as Boolean) {
-                    //list modification
+
+                    var extras: Bundle? = intent.extras
+                    usersList = extras!!.getStringArrayList("usersList") as ArrayList<String>
+
+                    val binding = ActivityTagger2Binding.inflate(layoutInflater)
+                    setContentView(binding.root)
+                    listView = binding.listView
+
+                    addUsersList()
+
+                    Toast.makeText(this@TaggerActivity2, "" +
+                            dataSnapshot.getValue(String::class.java)!!.replace("host:", ""),
+                        Toast.LENGTH_SHORT).show()
                 }
                 else if(dataSnapshot.getValue(String::class.java)?.contains("guest:") as Boolean) {
                     val binding = ActivityTagger2Binding.inflate(layoutInflater)

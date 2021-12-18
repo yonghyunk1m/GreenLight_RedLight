@@ -193,6 +193,9 @@ class PlayerActivity : AppCompatActivity(), SensorEventListener {
                     messageRef = database.getReference("rooms/$roomName/message")
                     message = "$playerName has failed "+ currentTime
                     messageRef.setValue(message)
+                    playerName = message
+                    val playerRef = database.getReference("rooms/$roomName/players/player$playerNumber")
+                    playerRef.setValue(playerName)
                     addRoomEventListener()
                     //val intent = Intent(this, FailActivity::class.java)
                     //startActivity(intent) // Transition to the next(MainActivity2) window
