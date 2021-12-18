@@ -13,12 +13,12 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.ImageButton
-import android.widget.ListView
-import android.widget.Toast
+import android.widget.*
 import com.example.greenlight_redlight.databinding.ActivityTagger2Binding
 import com.google.firebase.database.*
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class TaggerActivity2 : AppCompatActivity() {
 
@@ -35,6 +35,10 @@ class TaggerActivity2 : AppCompatActivity() {
     lateinit var database: FirebaseDatabase
     lateinit var messageRef: DatabaseReference
     lateinit var playersRef: DatabaseReference
+    lateinit var playerRef: DatabaseReference
+    lateinit var roomsRef: DatabaseReference
+    lateinit var lengthRef: DatabaseReference
+
     private lateinit var usersList: ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,6 +63,11 @@ class TaggerActivity2 : AppCompatActivity() {
         RedButton = binding.redButton
         listView = binding.listView
 
+        fun getCurrentTime(): String{
+            val formatter = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+            return formatter.format(Calendar.getInstance().time)
+        }
+
         GreenButton.setOnClickListener(object: View.OnClickListener {
             override fun onClick(v: View?) {
                 binding.background.setBackgroundResource(R.drawable.tagger_green_background)
@@ -72,6 +81,41 @@ class TaggerActivity2 : AppCompatActivity() {
                 binding.background.setBackgroundResource(R.drawable.tagger_red_background)
                 message = "Red Light"
                 messageRef.setValue(message)
+            }
+        })
+
+        listView.setOnItemClickListener(object: AdapterView.OnItemClickListener {
+            override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                val currentTime = getCurrentTime()
+                val playerNumber = position
+/*
+                playerRef = database.getReference("rooms/$roomName/players")
+                playerRef.addValueEventListener(object: ValueEventListener){
+
+                }
+                */
+                /*
+                database.reference.get().addOnSuccessListener{
+                    playerName = it.("rooms/$roomName/message")
+                }
+                val valueEventListener = object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        playerName = dataSnapshot.getValue
+                        for (ds in dataSnapshot.children) {
+                            playerName = ds.child("rooms/$roomName/players/player$playerNumber").getValue(String::class.java)
+                        }
+                    }
+                    override fun onCancelled(databaseError: DatabaseError) {
+                    }
+                }
+                */
+
+                messageRef = database.getReference("rooms/$roomName/message")
+                message = "$playerName has succeed "+ currentTime
+                messageRef.setValue(message)
+                playerName = message
+                val playerRef = database.getReference("rooms/$roomName/players/player$playerNumber")
+                playerRef.setValue(playerName)
             }
         })
 
@@ -120,6 +164,8 @@ class TaggerActivity2 : AppCompatActivity() {
             }
         })
     }
+
+
     private fun addRoomEventListener() {
         messageRef.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
